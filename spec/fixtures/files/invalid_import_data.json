@@ -1,0 +1,38 @@
+[
+  {
+    "details": {
+      "checkInDateTime": "2020-02-10 8,00",
+      "checkOutDateTime": "2020-02-10 16,00",
+      "waiting": true
+    },
+    "vehicle": {
+      "licence_plate": "",
+      "vin": "WDC2539641F3276904",
+      "brand": "MB",
+      "model": "GLC 43 AMG 4M",
+      "year": "2013",
+      "mileage": "20000",
+      "relevant_dates": "01-08-2020"
+    },
+    "customer": {
+      "first_name": "Dejan",
+      "last_name": "Stokanic"
+    },
+    "contact": {
+      "contact_method": "email",
+      "email": "dejan@tjekvik.com",
+      "phone": "+44 223 4455"
+    },
+    "jobs": [
+      {
+        "jobId": "DS1133",
+        "labor": [{
+          "description": "Tire Change"
+        }],
+        "menus": [{
+          "description": "Service Check"
+        }]
+      }
+    ]
+  }
+]
