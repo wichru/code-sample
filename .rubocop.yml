@@ -27,9 +27,6 @@ Metrics/BlockLength:
 Metrics/AbcSize:
   Exclude:
     - 'app/controllers/**/*.rb'
-Style/MixinUsage:
-  Exclude:
-    - lib/tjekvik_logger.rb
 Rails:
   Enabled: true
 Rails/UnknownEnv:
@@ -40,10 +37,14 @@ Rails/UnknownEnv:
     - staging
 Rails/FilePath:
   Enabled: false
-Style/Documentation:
-  Enabled: false
 Style/ClassAndModuleChildren:
   Enabled: false
+Style/Documentation:
+  Enabled: false
+Style/MixinUsage:
+  Exclude:
+    - lib/tjekvik_logger.rb
+    - lib/monads.rb
 Style/StringLiterals:
   EnforcedStyle: single_quotes
 Style/TrailingCommaInHashLiteral:
