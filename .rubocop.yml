@@ -1,0 +1,61 @@
+require:
+  - rubocop-rails
+  - rubocop-performance
+AllCops:
+  Exclude:
+    - 'bin/**/*'
+    - 'db/**/*'
+  Include:
+    - '**/*.rb'
+    - '**/*.rake'
+    - '**/Gemfile'
+    - '**/Rakefile'
+    - 'db/seeds.rb'
+  TargetRubyVersion: 2.7.2
+  SuggestExtensions: false
+Layout/LineLength:
+  Max: 120
+  IgnoredPatterns: ['(\A|\s)#']
+  Exclude:
+    - 'spec/**/*.rb'
+Metrics/BlockLength:
+  Exclude:
+    - '**/*.rake'
+    - 'spec/**/*.rb'
+    - 'config/environments/*.rb'
+    - 'config/routes.rb'
+Metrics/AbcSize:
+  Exclude:
+    - 'app/controllers/**/*.rb'
+Style/MixinUsage:
+  Exclude:
+    - lib/tjekvik_logger.rb
+Rails:
+  Enabled: true
+Rails/UnknownEnv:
+  Environments:
+    - production
+    - development
+    - test
+    - staging
+Rails/FilePath:
+  Enabled: false
+Style/Documentation:
+  Enabled: false
+Style/ClassAndModuleChildren:
+  Enabled: false
+Style/StringLiterals:
+  EnforcedStyle: single_quotes
+Style/TrailingCommaInHashLiteral:
+  EnforcedStyleForMultiline: comma
+Style/TrailingCommaInArrayLiteral:
+  EnforcedStyleForMultiline: comma
+Style/TrailingCommaInArguments:
+  EnforcedStyleForMultiline: comma
+Layout/HashAlignment:
+  EnforcedHashRocketStyle:
+    - key
+    - table
+  EnforcedColonStyle:
+    - key
+    - table

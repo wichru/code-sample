@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class Appointment < ApplicationRecord
-  validates_inclusion_of :customer_waiting, in: [true, false]
+  validates :customer_waiting, inclusion: { in: [true, false] }
 
   has_one :customer, autosave: true
   has_one :car, autosave: true
