@@ -47,10 +47,17 @@ module Appointments
 
     def save_appointment(appointment)
       if appointment.save
+        Twilio::TextMessanger.new(appointment.customer, appointment_params[:details][:checkInDateTime]).call if send_sms
         Success(appointment)
       else
         Failure(failure_appointments: appointment, appointments_errors: appointment.errors.full_messages)
       end
+    end
+
+    def send_sms
+      return false if appointment_params[:jobs][0][:menus][0][:labor].nil?
+
+      appointment_params[:jobs][0][:menus][0][:labor][0][:laborCode] == 'CD'
     end
   end
 end
