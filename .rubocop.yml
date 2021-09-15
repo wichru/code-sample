@@ -13,6 +13,7 @@ AllCops:
     - 'db/seeds.rb'
   TargetRubyVersion: 2.7.2
   SuggestExtensions: false
+  NewCops: enable
 Layout/LineLength:
   Max: 120
   IgnoredPatterns: ['(\A|\s)#']
@@ -45,6 +46,8 @@ Style/MixinUsage:
   Exclude:
     - lib/tjekvik_logger.rb
     - lib/monads.rb
+Style/ParallelAssignment:
+  Enabled: false
 Style/StringLiterals:
   EnforcedStyle: single_quotes
 Style/TrailingCommaInHashLiteral:
