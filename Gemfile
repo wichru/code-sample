@@ -16,6 +16,7 @@ gem 'dry-monads'
 gem 'letter_opener'
 gem 'pry-rails'
 gem 'puma', '~> 3.7'
+gem 'twilio-ruby', '~> 5.58.2'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
