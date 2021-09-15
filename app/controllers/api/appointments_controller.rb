@@ -5,44 +5,29 @@ class Api::AppointmentsController < ApplicationController
   include AppointmentsHelper
 
   def create
-    succeeded_appointments, failure_appointments, appointments_errors = [], [], []
+    @succeeded_appointments, @failure_appointments, @appointments_errors = [], [], []
 
     batch_create_appointments_params[:_json].each do |appointment_params|
       appointment = ::Appointments::Create.new(appointment_params).call
-      assign_response(appointment, succeeded_appointments, failure_appointments, appointments_errors)
+      assign_response(appointment, @succeeded_appointments, @failure_appointments, @appointments_errors)
     end
 
-    if failure_appointments.any?
-      failure_response(appointments_errors, failure_appointments)
-    else
-      success_response(succeeded_appointments)
-    end
+    result = ::Appointments::Responses::ManageResponses.new(email, responses_hash).call
+    render_result(result)
   end
 
   private
 
-  def failure_response(appointments_errors, failure_appointments)
-    send_failed_email(failure_appointments, appointments_errors)
-    render json: {
-      error: appointments_errors.join(', '),
-    }, status: :bad_request
+  def render_result(result)
+    result.success? ? success_response(@succeeded_appointments) : failure_response(@appointments_errors)
   end
 
-  def success_response(succeeded_appointments)
-    send_success_email(succeeded_appointments)
-    render json: {
-      success: succeeded_appointments.map do |appointment|
-                 appointment.as_json(include: %i[car customer work_orders])
-               end,
+  def responses_hash
+    {
+      succeeded_appointments: @succeeded_appointments,
+      failure_appointments: @failure_appointments,
+      errors: @appointments_errors,
     }
-  end
-
-  def send_failed_email(failure_appointments, appointments_errors)
-    AppointmentMailer.failed_mail(email, failure_appointments.size, appointments_errors).deliver_now
-  end
-
-  def send_success_email(succeeded_appointments)
-    AppointmentMailer.success_mail(email, succeeded_appointments.size).deliver_now if succeeded_appointments.any?
   end
 
   def email

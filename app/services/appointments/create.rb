@@ -6,9 +6,6 @@ module Appointments
   class Create
     def initialize(appointment_params)
       @appointment_params = appointment_params
-      @succeeded_appointments = []
-      @failure_appointments = []
-      @appointments_errors = []
     end
 
     def call
@@ -50,9 +47,9 @@ module Appointments
 
     def save_appointment(appointment)
       if appointment.save
-        Success(succeeded_appointments)
+        Success(appointment)
       else
-        Failure(failure_appointments: failure_appointments, appointments_errors: appointment.errors.full_messages)
+        Failure(failure_appointments: appointment, appointments_errors: appointment.errors.full_messages)
       end
     end
   end

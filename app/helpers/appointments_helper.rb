@@ -9,4 +9,20 @@ module AppointmentsHelper
         (appointments_errors << appointment.failure[:appointments_errors])
     end
   end
+
+  private
+
+  def success_response(succeeded_appointments)
+    render json: {
+      success: succeeded_appointments.map do |appointment|
+        appointment.as_json(include: %i[car customer work_orders])
+      end,
+    }
+  end
+
+  def failure_response(appointments_errors)
+    render json: {
+      error: appointments_errors.join(', '),
+    }, status: :bad_request
+  end
 end
