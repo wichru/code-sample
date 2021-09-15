@@ -69,7 +69,8 @@ RSpec.describe 'Importing data', type: :request do
     end
 
     it 'logs the error' do
-      expect(TjekvikLogger).to have_received(:log_error).with("Car registration number can't be blank")
+      expect(TjekvikLogger).to receive(:log_error).with("Car registration number can't be blank")
+      subject
     end
 
     it 'returns json error message' do
