@@ -43,7 +43,7 @@ RSpec.describe 'Importing data', type: :request do
       customer = Appointment.last.customer
 
       expect(customer.name).to eq 'Dejan Stokanic'
-      expect(customer.phone_number).to eq '+44 223 4455'
+      expect(customer.phone_number).to eq '+48606114110'
     end
   end
 
