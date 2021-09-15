@@ -17,7 +17,7 @@ module Appointments
         .bind(method(:save_appointment))
     end
 
-    attr_reader :appointment_params, :succeeded_appointments, :failure_appointments, :appointments_errors
+    attr_reader :appointment_params
 
     private
 
