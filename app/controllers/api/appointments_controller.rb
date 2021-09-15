@@ -40,7 +40,7 @@ class Api::AppointmentsController < ApplicationController
                     vehicle: %i[licence_plate vin brand model],
                     customer: %i[first_name last_name],
                     contact: %i[contact_method email phone],
-                    jobs: [:jobId, { labor: [:description], menus: [:description] }],
+                    jobs: [:jobId, { labor: [:description], menus: [:description, { labor: [:laborCode] }] }],
                   ])
   end
 end
