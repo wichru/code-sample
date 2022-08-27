@@ -21,7 +21,7 @@
     "contact": {
       "contact_method": "email",
       "email": "dejan@tjekvik.com",
-      "phone": "+44 223 4455"
+      "phone": "+48606114110"
     },
     "jobs": [
       {
@@ -34,7 +34,7 @@
         "menus": [{
           "description": "Service Check",
           "labor": [{
-            "itemId": "62-2458914-24113-03", 
+            "itemId": "62-2458914-24113-03",
             "laborCode": "VHC",
             "description": "Carry Out Visual Health Check (F.O.C)"
           }]
@@ -64,7 +64,7 @@
     "contact": {
       "contact_method": "email",
       "email": "dejan@tjekvik.com",
-      "phone": "+44 223 4455"
+      "phone": "+48606114110"
     },
     "jobs": [
       {
@@ -79,9 +79,9 @@
           "labor": [{
             "itemId": "62-2458914-24113-02",
             "laborCode": "CD"
-          }, 
+          },
           {
-            "itemId": "62-2458914-24113-03", 
+            "itemId": "62-2458914-24113-03",
             "laborCode": "VHC",
             "description": "Carry Out Visual Health Check (F.O.C)"
           }]

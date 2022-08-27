@@ -1,66 +1,46 @@
+# frozen_string_literal: true
+
 class Api::AppointmentsController < ApplicationController
   skip_before_action :verify_authenticity_token
+  include AppointmentsHelper
 
   def create
-    email = batch_create_appointments_params[:_json].first["contact"]["email"]
-    succeeded_appointments, failure_appointments, appointments_errors = [], [], []
+    @succeeded_appointments, @failure_appointments, @appointments_errors = [], [], []
 
     batch_create_appointments_params[:_json].each do |appointment_params|
-      appointment = Appointment.new(customer_waiting: appointment_params[:details][:waiting])
-      customer = appointment.build_customer(
-        name: "#{appointment_params["customer"]["first_name"]} #{appointment_params["customer"]["last_name"]}",
-        email: appointment_params["contact"]["email"],
-        phone_number: appointment_params["contact"]["phone"])
-      car = appointment.build_car(
-        registration_number: appointment_params["vehicle"]["licence_plate"],
-        info: car_info(appointment_params[:vehicle]))
-
-      appointment_params["jobs"].each do |job|
-        appointment.work_orders.build(
-          order_number: job["jobId"],
-          description: "#{job["labor"].first["description"]}\n#{job["menus"].first["description"]}",
-          starting_at: check_in_date(appointment_params[:details]),
-          ending_at: check_out_date(appointment_params[:details]))
-      end
-
-      if appointment.save
-        succeeded_appointments << appointment
-      else
-        failure_appointments << appointment
-        appointments_errors += appointment.errors.full_messages
-        log_error(appointments_errors)
-      end
+      appointment = ::Appointments::Create.new(appointment_params).call
+      assign_response(appointment, @succeeded_appointments, @failure_appointments, @appointments_errors)
     end
 
-    if failure_appointments.any?
-      AppointmentMailer.failed_mail(email, failure_appointments.size, appointments_errors).deliver_now
-
-      render json: {
-        error: appointments_errors.join(', ')
-      }, status: 400
-    else
-      AppointmentMailer.success_mail(email, succeeded_appointments.size).deliver_now if succeeded_appointments.any?
-      render json: {
-        success: succeeded_appointments.map { |appointment|
-          appointment.as_json(include: [:car, :customer, :work_orders]) }}
-    end
+    result = ::Appointments::Responses::ManageResponses.new(email, responses_hash).call
+    render_result(result)
   end
 
   private
 
-  def car_info(vehicle)
-    "VIN: #{vehicle[:vin]}\nModel:#{vehicle[:brand]} #{vehicle[:model]}"
+  def render_result(result)
+    result.success? ? success_response(@succeeded_appointments) : failure_response(@appointments_errors)
   end
 
-  def check_in_date(details)
-    details[:checkInDateTime].tr(',', ':')
+  def responses_hash
+    {
+      succeeded_appointments: @succeeded_appointments,
+      failure_appointments: @failure_appointments,
+      errors: @appointments_errors,
+    }
   end
 
-  def check_out_date(details)
-    details[:checkOutDateTime].tr(',', ':')
+  def email
+    batch_create_appointments_params[:_json].first['contact']['email']
   end
 
   def batch_create_appointments_params
-    params.permit(_json: ["details": [:checkInDateTime, :checkOutDateTime, :waiting], "vehicle": [:licence_plate, :vin, :brand, :model], "customer": [:first_name, :last_name], "contact": [:contact_method, :email, :phone], jobs:[:jobId, labor: [:description], menus: [:description]]])
+    params.permit(_json: [
+                    details: %i[checkInDateTime checkOutDateTime waiting],
+                    vehicle: %i[licence_plate vin brand model],
+                    customer: %i[first_name last_name],
+                    contact: %i[contact_method email phone],
+                    jobs: [:jobId, { labor: [:description], menus: [:description, { labor: [:laborCode] }] }],
+                  ])
   end
 end
